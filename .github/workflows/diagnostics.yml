@@ -1,0 +1,48 @@
+name: Diagnostics
+
+# Manual-only checks that need GitHub's network or secrets:
+#   feeds     — how every RSS feed answers a GitHub runner. Many sites block
+#               datacenter IPs, so a feed that works from a laptop can 403 here.
+#   relevance — run reference headlines through the topic filters (uses OpenAI).
+#               Re-run after editing the translator / relevance prompts.
+on:
+  workflow_dispatch:
+    inputs:
+      check:
+        description: 'Which check to run'
+        type: choice
+        options: [feeds, relevance]
+        default: feeds
+      extra_feeds:
+        description: 'feeds: candidate feed URLs to test too, space-separated'
+        required: false
+        default: ''
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r python/requirements.txt
+
+      - name: Feed health
+        if: inputs.check == 'feeds'
+        working-directory: python
+        env:
+          EXTRA_FEEDS: ${{ inputs.extra_feeds }}
+        run: python check_feeds.py $EXTRA_FEEDS
+
+      - name: Topic filter regression
+        if: inputs.check == 'relevance'
+        working-directory: python
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python check_relevance.py

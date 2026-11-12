@@ -118,6 +118,9 @@ SCHEDULE_TIME = "07:00"
 # --- Quiet Hours (news feed paused) ---
 QUIET_START = "21:00"  # stop posting at this time
 QUIET_END   = "07:00"  # resume posting at this time
+# Quiet hours are wall-clock Moscow time. GitHub runners run in UTC, so the
+# zone must be explicit or the bot posts at night.
+TIMEZONE = "Europe/Moscow"
 
 # --- Output Settings ---
 OUTPUT_DIR = Path(__file__).parent / "output"

@@ -14,13 +14,14 @@ import random
 import re
 from datetime import datetime, time as dtime, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import httpx
 
 import config
 from rss_feeds import RSS_FEEDS
 from rss_fetcher import find_article_with_image
-from translator import translate_article
+from translator import is_on_topic, translate_article
 from wiki_linker import add_wiki_links
 
 logger = logging.getLogger(__name__)
@@ -666,6 +667,13 @@ async def _post_one(posted_urls: set, posted_titles: set, recent_tags: list) -> 
         try:
             if feed.get("lang") == "ru":
                 # Russian-language feed: skip OpenAI translation, format locally.
+                # Skipping the translator also skips its relevance rule, so ask
+                # separately — general-business RU feeds carry lots of off-topic news.
+                if not await is_on_topic(article["title"], article["description"]):
+                    logger.info("Skipped off-topic: %s", article["title"])
+                    posted_urls.add(article["url"])
+                    save_posted(article["url"])
+                    continue
                 text = format_russian_article(article["title"], article["description"])
             else:
                 text = await translate_article(article["title"], article["description"])
@@ -709,7 +717,7 @@ def _parse_time(t: str) -> dtime:
 
 def _quiet_sleep_seconds() -> float | None:
     """Return seconds to sleep if we're in quiet hours, else None."""
-    now = datetime.now()
+    now = datetime.now(ZoneInfo(config.TIMEZONE))
     quiet_start = _parse_time(config.QUIET_START)
     quiet_end   = _parse_time(config.QUIET_END)
 
@@ -726,7 +734,7 @@ def _quiet_sleep_seconds() -> float | None:
         return None
 
     # Sleep until quiet_end today or tomorrow
-    resume = datetime.combine(now.date(), quiet_end)
+    resume = datetime.combine(now.date(), quiet_end, tzinfo=now.tzinfo)
     if resume <= now:
         resume += timedelta(days=1)
     return (resume - now).total_seconds()
@@ -734,6 +742,15 @@ def _quiet_sleep_seconds() -> float | None:
 
 async def post_once() -> bool:
     """Post a single news item and exit. For use with GitHub Actions cron."""
+    # Triggers can arrive late (GitHub cron has been running hours behind
+    # since Aug 2026), so a run can land at night. Never post in quiet hours.
+    if _quiet_sleep_seconds() is not None:
+        logger.info(
+            "news-once: quiet hours (%s–%s %s). Skipping.",
+            config.QUIET_START, config.QUIET_END, config.TIMEZONE,
+        )
+        return False
+
     # Enforce minimum interval between posts (GitHub Actions cron is imprecise)
     elapsed = _seconds_since_last_post()
     if elapsed is not None and elapsed < POST_INTERVAL:
