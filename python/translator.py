@@ -16,14 +16,15 @@ _client: AsyncOpenAI | None = None
 # Channel scope. Shared by the translator prompt (English feeds) and the
 # yes/no relevance check (Russian feeds), so both filter by the same rules.
 TOPIC_SCOPE = (
-    "beauty и косметика, уход, парфюмерия; fashion, luxury, streetwear и аксессуары; "
+    "beauty и косметика, уход, парфюмерия; fashion, luxury, streetwear, украшения и аксессуары; "
     "ритейл и e-commerce; маркетинг, реклама, PR, брендинг, медиа и adtech; "
     "SMM, соцсети, инфлюенсеры и creator economy"
 )
 
 ON_TOPIC_HINT = (
-    "Новость подходит, если в ней есть бренд, коллекция, рекламная кампания, запуск "
-    "продукта, кадровое назначение в индустрии или маркетинговый, PR- или ритейл-кейс."
+    "Новость подходит, если она о бренде или компании из этих сфер (запуск, закрытие, "
+    "сделка, финансовые результаты, коллекция, рекламная кампания), о кадровом назначении "
+    "в индустрии или о маркетинговом, PR- или ритейл-кейсе."
 )
 
 OFF_TOPIC_EXAMPLES = (

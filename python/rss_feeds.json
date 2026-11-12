@@ -1,5 +1,4 @@
 [
-  { "category": "Beauty & Fashion индустрия", "url": "https://www.businessoffashion.com/feed/", "hashtags": "#fashion #индустрия #бизнес" },
   { "category": "Beauty & Fashion индустрия", "url": "https://wwd.com/feed/", "hashtags": "#fashion #beauty #индустрия" },
   { "category": "Beauty & Fashion индустрия", "url": "https://www.glossy.co/feed/", "hashtags": "#beauty #fashion #retail" },
   { "category": "Beauty & Fashion индустрия", "url": "https://www.dazeddigital.com/rss", "hashtags": "#fashion #beauty #тренды" },
@@ -7,8 +6,9 @@
   { "category": "Beauty & Fashion индустрия", "url": "https://www.highsnobiety.com/feed/", "hashtags": "#fashion #streetwear #бренды" },
   { "category": "Beauty & Fashion индустрия", "url": "https://i-d.co/feed/", "hashtags": "#fashion #культура #тренды" },
   { "category": "Beauty & Fashion индустрия", "url": "https://fashionmagazine.com/feed/", "hashtags": "#fashion #глянец #стиль" },
-  { "category": "Beauty & Fashion индустрия", "url": "https://www.fashiondive.com/feeds/news/", "hashtags": "#fashion #индустрия #retail" },
   { "category": "Beauty & Fashion индустрия", "url": "https://www.luxurydaily.com/feed/", "hashtags": "#luxury #маркетинг #бренды" },
+  { "category": "Beauty & Fashion индустрия", "url": "https://fashionunited.uk/rss-news", "hashtags": "#fashion #индустрия #бизнес" },
+  { "category": "Beauty & Fashion индустрия", "url": "https://www.just-style.com/feed/", "hashtags": "#fashion #индустрия #retail" },
 
   { "category": "Beauty", "url": "https://www.allure.com/feed/rss", "hashtags": "#beauty #макияж #уход" },
   { "category": "Beauty", "url": "https://www.refinery29.com/en-us/rss.xml", "hashtags": "#beauty #fashion #тренды" },
@@ -17,6 +17,8 @@
   { "category": "Beauty", "url": "https://www.popsugar.com/beauty/feed", "hashtags": "#beauty #макияж #тренды" },
   { "category": "Beauty", "url": "https://stylecaster.com/feed/", "hashtags": "#beauty #fashion #стиль" },
   { "category": "Beauty", "url": "https://www.premiumbeautynews.com/spip.php?page=backend", "hashtags": "#beauty #индустрия #упаковка" },
+  { "category": "Beauty", "url": "https://www.cosmeticsbusiness.com/rss", "hashtags": "#beauty #индустрия #бренды" },
+  { "category": "Beauty", "url": "https://www.globalcosmeticsnews.com/feed/", "hashtags": "#beauty #индустрия #бизнес" },
 
   { "category": "Глянец", "url": "https://www.vogue.com/feed/rss", "hashtags": "#vogue #fashion #beauty" },
   { "category": "Глянец", "url": "https://www.elle.com/rss/all.xml/", "hashtags": "#fashion #beauty #глянец" },
@@ -33,7 +35,6 @@
   { "category": "Маркетинг, PR, adtech", "url": "https://martech.org/feed/", "hashtags": "#martech #данные #аналитика" },
   { "category": "Маркетинг, PR, adtech", "url": "https://www.marketingdive.com/feeds/news/", "hashtags": "#маркетинг #бренды #тренды" },
   { "category": "Маркетинг, PR, adtech", "url": "https://www.marketingbrew.com/feed.xml", "hashtags": "#маркетинг #бренды #тренды" },
-  { "category": "Маркетинг, PR, adtech", "url": "https://www.marketingweek.com/feed/", "hashtags": "#маркетинг #бренды #стратегия" },
   { "category": "Маркетинг, PR, adtech", "url": "https://www.brandingmag.com/feed/", "hashtags": "#branding #маркетинг #стратегия" },
   { "category": "Маркетинг, PR, adtech", "url": "https://www.adexchanger.com/feed/", "hashtags": "#adtech #данные #реклама" },
   { "category": "Маркетинг, PR, adtech", "url": "https://www.chiefmarketer.com/feed/", "hashtags": "#маркетинг #CMO #стратегия" },
@@ -49,7 +50,6 @@
   { "category": "Маркетинг, PR, реклама Россия", "url": "https://adindex.ru/news/news.rss", "hashtags": "#маркетинг #реклама #Россия", "lang": "ru" },
   { "category": "Маркетинг, PR, реклама Россия", "url": "https://www.akarussia.ru/feed/", "hashtags": "#реклама #индустрия #Россия", "lang": "ru" },
   { "category": "Маркетинг, PR, реклама Россия", "url": "https://mediabitch.ru/feed/", "hashtags": "#PR #коммуникации #Россия", "lang": "ru" },
-  { "category": "Маркетинг, PR, реклама Россия", "url": "https://prexplore.ru/feed/", "hashtags": "#PR #кейсы #Россия", "lang": "ru" },
   { "category": "Маркетинг, PR, реклама Россия", "url": "https://new-retail.ru/rss/", "hashtags": "#retail #маркетинг #Россия", "lang": "ru" },
   { "category": "Маркетинг, PR, реклама Россия", "url": "https://www.retail.ru/rss/news/", "hashtags": "#retail #бренды #Россия", "lang": "ru" },
   { "category": "Маркетинг, PR, реклама Россия", "url": "https://incrussia.ru/feed/", "hashtags": "#бизнес #бренды #Россия", "lang": "ru" },
@@ -59,28 +59,19 @@
   { "category": "Influencer marketing / SMM", "url": "https://blog.hootsuite.com/feed/", "hashtags": "#SMM #контент #стратегия" },
   { "category": "Influencer marketing / SMM", "url": "https://sproutsocial.com/insights/feed/", "hashtags": "#SMM #бренды #данные" },
   { "category": "Influencer marketing / SMM", "url": "https://www.socialmediatoday.com/feeds/news/", "hashtags": "#SMM #соцсети #тренды" },
-  { "category": "Influencer marketing / SMM", "url": "https://grin.co/blog/feed/", "hashtags": "#инфлюенсеры #маркетинг #DTC" },
-  { "category": "Influencer marketing / SMM", "url": "https://trendhero.io/blog/feed/", "hashtags": "#инфлюенсеры #Instagram #данные" },
   { "category": "Influencer marketing / SMM", "url": "https://buffer.com/resources/rss/", "hashtags": "#SMM #контент #соцсети" },
-  { "category": "Influencer marketing / SMM", "url": "https://www.convinceandconvert.com/feed/", "hashtags": "#маркетинг #контент #SMM" },
   { "category": "Influencer marketing / SMM", "url": "https://sparktoro.com/blog/feed/", "hashtags": "#маркетинг #аудитория #SMM" },
   { "category": "Influencer marketing / SMM", "url": "https://www.upfluence.com/blog/feed", "hashtags": "#инфлюенсеры #маркетинг #кейсы" },
-  { "category": "Influencer marketing / SMM", "url": "https://izea.com/feed/", "hashtags": "#инфлюенсеры #creatoreconomy" },
   { "category": "Influencer marketing / SMM", "url": "https://neilpatel.com/blog/feed/", "hashtags": "#маркетинг #SEO #контент" },
 
   { "category": "Креаторы и creator economy", "url": "https://www.passionfru.it/feed", "hashtags": "#креаторы #creatoreconomy" },
-  { "category": "Креаторы и creator economy", "url": "https://www.thetilt.com/feed", "hashtags": "#креаторы #контент #бизнес" },
   { "category": "Креаторы и creator economy", "url": "https://creatoreconomy.so/feed", "hashtags": "#креаторы #creatoreconomy" },
   { "category": "Креаторы и creator economy", "url": "https://www.tubefilter.com/feed/", "hashtags": "#креаторы #YouTube #видео" },
-  { "category": "Креаторы и creator economy", "url": "https://www.workweek.com/feed", "hashtags": "#креаторы #медиа #бизнес" },
   { "category": "Креаторы и creator economy", "url": "https://2pml.com/feed/", "hashtags": "#DTC #маркетинг #бренды" },
   { "category": "Креаторы и creator economy", "url": "https://www.creatorhandbook.net/feed/", "hashtags": "#креаторы #YouTube #монетизация" },
   { "category": "Креаторы и creator economy", "url": "https://digitalcontentnext.org/feed/", "hashtags": "#медиа #контент #монетизация" },
   { "category": "Креаторы и creator economy", "url": "https://www.theinformation.com/feed", "hashtags": "#медиа #технологии #бизнес" },
 
   { "category": "Retail / e-commerce", "url": "https://www.retaildive.com/feeds/news/", "hashtags": "#retail #ecommerce #бренды" },
-  { "category": "Retail / e-commerce", "url": "https://www.modernretail.co/feed/", "hashtags": "#retail #ecommerce #DTC" },
-  { "category": "Retail / e-commerce", "url": "https://www.retailtouchpoints.com/feed", "hashtags": "#retail #ecommerce #технологии" },
-  { "category": "Retail / e-commerce", "url": "https://retailwire.com/feed/", "hashtags": "#retail #ecommerce #ритейл" },
-  { "category": "Retail / e-commerce", "url": "https://thegood.com/insights/feed/", "hashtags": "#DTC #ecommerce #CRO" }
+  { "category": "Retail / e-commerce", "url": "https://www.modernretail.co/feed/", "hashtags": "#retail #ecommerce #DTC" }
 ]

@@ -9,9 +9,26 @@
 | Процесс | Расписание (MSK) | Что делает |
 |---|---|---|
 | **RSS News** | Каждые 20 мин, 07:00–21:00 | Берёт статью из RSS, переводит на русский через GPT-4o-mini, добавляет Wikipedia-ссылки, постит в Telegram с фото |
-| **Deep Research** | 06:00 ежедневно | Через NotebookLM делает глубокое исследование beauty/fashion новостей за 24ч по 7 разделам, генерирует аудио-подкаст, отправляет в Telegram |
+| **Deep Research** | 13:00 ежедневно | Через NotebookLM делает глубокое исследование beauty/fashion новостей за 24ч по 7 разделам, генерирует аудио-подкаст, отправляет в Telegram |
 
-Тихие часы (21:00–07:00 MSK) — RSS-новости не публикуются.
+Тихие часы (21:00–07:00 MSK) — RSS-новости не публикуются, даже если запуск пришёл в это время.
+
+### Кто запускает
+
+С августа 2026 GitHub cron срабатывает 2–4 раза в день вместо положенных и опаздывает на часы,
+поэтому основной триггер — [cron-job.org](https://console.cron-job.org): он вызывает
+`POST /repos/kirill-morozov-n/beauty-news/actions/workflows/<file>/dispatches` с телом `{"ref":"master"}`
+(fine-grained PAT, право Actions: read & write). Cron в workflow-файлах остался запасным:
+
+- `rss-news.yml` — `concurrency` не даёт двум запускам постить одновременно, `POST_INTERVAL` — постить чаще 10 мин.
+- `beauty-news.yml` — job `guard` (`.github/actions/skip-if-delivered`) пропускает запуск, если подкаст
+  уже вышел за последние 20 ч. Принудительный перезапуск: Run workflow → `force`.
+
+### Диагностика
+
+Actions → **Diagnostics** → Run workflow:
+- `feeds` — как каждый фид отвечает раннеру GitHub (многие сайты режут IP дата-центров), плюс кандидаты из `extra_feeds`;
+- `relevance` — прогон эталонных заголовков через тематические фильтры (`python/check_relevance.py`). Запускать после правки промптов.
 
 ## Структура проекта
 
@@ -52,13 +69,15 @@ Beauty News/
 
 ## Категории RSS-фидов
 
-- **Beauty & Fashion индустрия** — Business of Fashion, WWD, Glossy, Fashionista, Dazed, Hypebeast, Highsnobiety, Fashion United
-- **Beauty** — Allure, Byrdie, The Cut, Refinery29, Cosmetics Business, Beauty Independent, Cosmetics Design, Happi
+Источник истины — `python/rss_feeds.json`.
+
+- **Beauty & Fashion индустрия** — WWD, Glossy, FashionUnited, Just Style, Luxury Daily, Dazed, i-D, Hypebeast, Highsnobiety
+- **Beauty** — Allure, Refinery29, Beauty Independent, Beauty Inc, Cosmetics Business, Global Cosmetics News, Premium Beauty News
 - **Глянец** — Vogue, Elle, Harper's Bazaar, Cosmopolitan, Marie Claire, W, InStyle
 - **Россия** — The Blueprint, Buro247, BeautyHack, Beauty Insider, SRSLY, Sostav, AdIndex
 - **Маркетинг / PR** — Marketing Brew, Digiday, AdAge, AdWeek, Campaign, PRWeek, PR Daily, Martech, Marketing Dive
 - **Influencer marketing / SMM** — Influencer Marketing Hub, Later, Hootsuite, Sprout Social, Social Media Today
-- **Креаторы / creator economy** — Passionfruit, Publish Press, The Tilt, Creator Economy
+- **Креаторы / creator economy** — Passionfruit, Creator Economy, Tubefilter, Creator Handbook, Digital Content Next
 - **Retail / e-commerce** — Retail Dive, Modern Retail
 
 ## Секреты GitHub Actions
