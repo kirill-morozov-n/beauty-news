@@ -8,6 +8,13 @@ on:
     - cron: '*/5 4-18 * * *'
   workflow_dispatch: # manual trigger
 
+# Primary trigger is cron-job.org (workflow_dispatch every 20 min); the cron
+# above is a fallback. Never run two posters at once: they would restore the
+# same rss_posted.json cache and could post the same article twice.
+concurrency:
+  group: rss-news
+  cancel-in-progress: false
+
 jobs:
   post:
     runs-on: ubuntu-latest

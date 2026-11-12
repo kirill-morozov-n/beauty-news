@@ -2,12 +2,40 @@ name: Beauty News Daily
 
 on:
   schedule:
+    # Fallback only. Since Aug 2026 GitHub cron fires hours late or not at all;
+    # the primary trigger is cron-job.org calling workflow_dispatch.
+    # The guard job below makes a second trigger harmless.
     # 10:00 UTC = 13:00 MSK (разнесено от Good News 03:00 UTC, даёт лимитам NotebookLM сброситься)
     - cron: '0 10 * * *'
-  workflow_dispatch: # manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Run even if already delivered recently'
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      skip: ${{ steps.delivered.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/actions
+      - id: delivered
+        uses: ./.github/actions/skip-if-delivered
+        with:
+          window-hours: 20
+
   research:
+    needs: guard
+    if: needs.guard.outputs.skip != 'true' || inputs.force
     runs-on: ubuntu-latest
     timeout-minutes: 90
 

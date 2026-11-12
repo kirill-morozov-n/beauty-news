@@ -1,0 +1,42 @@
+name: Skip if already delivered
+description: >
+  Outputs skip=true when this workflow's main job already succeeded within the
+  last `window-hours`. GitHub cron has been firing hours late since Aug 2026,
+  so daily workflows are also dispatched by cron-job.org; whichever trigger
+  arrives second sees the first one's delivery and stands down. Fails open:
+  if the GitHub API can't be read, the workflow runs.
+inputs:
+  window-hours:
+    description: Look-back window in hours
+    required: true
+outputs:
+  skip:
+    description: "'true' if a delivery already happened inside the window"
+    value: ${{ steps.check.outputs.skip }}
+runs:
+  using: composite
+  steps:
+    - id: check
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        WINDOW_HOURS: ${{ inputs.window-hours }}
+      run: |
+        wf=$(basename "${GITHUB_WORKFLOW_REF%@*}")
+        since=$(date -u -d "-${WINDOW_HOURS} hours" +%Y-%m-%dT%H:%M:%SZ)
+        runs=$(gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/$wf/runs" \
+                 -f status=success -f "created=>=$since" --jq '.workflow_runs[].id' 2>/dev/null) || runs=""
+        skip=false
+        for id in $runs; do
+          # A run whose main job was guarded out still ends "success", so count
+          # a run only if some job other than the guard itself succeeded.
+          n=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$id/jobs" \
+                --jq '[.jobs[] | select(.name != "guard" and .conclusion == "success")] | length' 2>/dev/null) || n=0
+          if [ "${n:-0}" -gt 0 ]; then
+            echo "Already delivered by run $id (window since $since) — skipping."
+            skip=true
+            break
+          fi
+        done
+        if [ "$skip" = false ]; then echo "No delivery since $since — running."; fi
+        echo "skip=$skip" >> "$GITHUB_OUTPUT"
