@@ -1,17 +1,20 @@
 name: Skip if already delivered
 description: >
-  Outputs skip=true when this workflow's main job already succeeded within the
-  last `window-hours`. GitHub cron has been firing hours late since Aug 2026,
-  so daily workflows are also dispatched by cron-job.org; whichever trigger
-  arrives second sees the first one's delivery and stands down. Fails open:
-  if the GitHub API can't be read, the workflow runs.
+  Guards the GitHub cron fallback. GitHub cron has been firing hours late since
+  Aug 2026, so daily workflows are dispatched on time by cron-job.org and the
+  cron stays only as a fallback. A dispatched run always proceeds; a scheduled
+  run outputs skip=true if the main job already succeeded within the last
+  `window-hours`. Only scheduled runs may skip: if dispatches could skip too,
+  one late cron delivery would make the next on-time dispatch skip, and the
+  workflow would stay stuck on GitHub's late timing. Fails open: if the GitHub
+  API can't be read, the workflow runs.
 inputs:
   window-hours:
     description: Look-back window in hours
     required: true
 outputs:
   skip:
-    description: "'true' if a delivery already happened inside the window"
+    description: "'true' if this is a scheduled run and a delivery already happened inside the window"
     value: ${{ steps.check.outputs.skip }}
 runs:
   using: composite
@@ -22,6 +25,11 @@ runs:
         GH_TOKEN: ${{ github.token }}
         WINDOW_HOURS: ${{ inputs.window-hours }}
       run: |
+        if [ "$GITHUB_EVENT_NAME" != "schedule" ]; then
+          echo "Triggered by $GITHUB_EVENT_NAME (primary trigger) — running."
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
         wf=$(basename "${GITHUB_WORKFLOW_REF%@*}")
         since=$(date -u -d "-${WINDOW_HOURS} hours" +%Y-%m-%dT%H:%M:%SZ)
         runs=$(gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/$wf/runs" \

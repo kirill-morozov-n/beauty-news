@@ -4,15 +4,10 @@ on:
   schedule:
     # Fallback only. Since Aug 2026 GitHub cron fires hours late or not at all;
     # the primary trigger is cron-job.org calling workflow_dispatch.
-    # The guard job below makes a second trigger harmless.
+    # The guard job skips this fallback run if cron-job.org already delivered.
     # 10:00 UTC = 13:00 MSK (разнесено от Good News 03:00 UTC, даёт лимитам NotebookLM сброситься)
     - cron: '0 10 * * *'
   workflow_dispatch:
-    inputs:
-      force:
-        description: 'Run even if already delivered recently'
-        type: boolean
-        default: false
 
 concurrency:
   group: ${{ github.workflow }}
@@ -35,7 +30,7 @@ jobs:
 
   research:
     needs: guard
-    if: needs.guard.outputs.skip != 'true' || inputs.force
+    if: needs.guard.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
 

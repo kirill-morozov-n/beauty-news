@@ -21,8 +21,9 @@
 (fine-grained PAT, право Actions: read & write). Cron в workflow-файлах остался запасным:
 
 - `rss-news.yml` — `concurrency` не даёт двум запускам постить одновременно, `POST_INTERVAL` — постить чаще 10 мин.
-- `beauty-news.yml` — job `guard` (`.github/actions/skip-if-delivered`) пропускает запуск, если подкаст
-  уже вышел за последние 20 ч. Принудительный перезапуск: Run workflow → `force`.
+- `beauty-news.yml` — запуск от cron-job.org (или ручной Run workflow) выполняется всегда, а запасной
+  запуск по cron job `guard` (`.github/actions/skip-if-delivered`) пропускает, если подкаст уже вышел
+  за последние 20 ч.
 
 ### Диагностика
 

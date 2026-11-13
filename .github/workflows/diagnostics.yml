@@ -38,7 +38,10 @@ jobs:
         working-directory: python
         env:
           EXTRA_FEEDS: ${{ inputs.extra_feeds }}
-        run: python check_feeds.py $EXTRA_FEEDS
+        run: |
+          # Unquoted on purpose: extra_feeds is a space-separated list of URLs.
+          # shellcheck disable=SC2086
+          python check_feeds.py $EXTRA_FEEDS
 
       - name: Topic filter regression
         if: inputs.check == 'relevance'
